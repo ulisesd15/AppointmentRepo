@@ -1,0 +1,22 @@
+{
+  "name": "appointmentrepo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ulisesd15/AppointmentRepo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ulisesd15/AppointmentRepo/issues"
+  },
+  "homepage": "https://github.com/ulisesd15/AppointmentRepo#readme"
+}
