@@ -1,21 +1,23 @@
 import Layout from '../../components/Layout.jsx';
+import AdminAppointmentsPanel from './AdminAppointmentsPanel.jsx';
+import AdminStatsPanel from './AdminStatsPanel.jsx';
+import BusinessHoursPanel from './BusinessHoursPanel.jsx';
 
 export default function AdminDashboardPage() {
   return (
     <Layout>
-      <section className="card">
+      <section className="card admin-hero">
         <p className="eyebrow">Clinic admin</p>
         <h1>Admin dashboard</h1>
         <p>
-          The admin route is now wired. Phase 4 will add dashboard stats, appointment approvals,
-          business hours, schedule exceptions, users, and announcements.
+          Manage appointments and the weekly schedule from one place. Exceptions,
+          blocked slots, users, and announcements are ready in the API and can be expanded in the next UI pass.
         </p>
-        <div className="grid">
-          <div className="notice">Appointments module</div>
-          <div className="notice">Business hours module</div>
-          <div className="notice">Users module</div>
-        </div>
+        <AdminStatsPanel />
       </section>
+
+      <AdminAppointmentsPanel />
+      <BusinessHoursPanel />
     </Layout>
   );
 }
