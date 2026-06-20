@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ProtectedRoute from '../components/ProtectedRoute.jsx';
 import HomePage from '../pages/HomePage/loginPage.jsx';
 import LoginPage from '../pages/LoginPage/adminPage.jsx';
 import BookingPage from '../pages/BookingPage/bookingPage.jsx';
@@ -12,8 +13,22 @@ export default function Router() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/book" element={<BookingPage />} />
-        <Route path="/appointments" element={<MyAppointmentsPage />} />
-        <Route path="/admin" element={<AdminDashboardPage />} />
+        <Route
+          path="/appointments"
+          element={
+            <ProtectedRoute>
+              <MyAppointmentsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute requireAdmin>
+              <AdminDashboardPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
