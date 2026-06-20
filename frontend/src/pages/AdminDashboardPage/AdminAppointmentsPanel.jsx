@@ -4,11 +4,11 @@ import {
   updateAppointmentStatus,
 } from '../../services/adminService.js';
 
-const STATUS_OPTIONS = ['pending', 'confirmed', 'completed', 'cancelled', 'rejected'];
+const STATUS_OPTIONS = ['pending', 'confirmed', 'completed', 'cancelled'];
 
 function formatAppointment(appointment) {
   const date = appointment.appointmentDate || appointment.date;
-  const time = appointment.appointmentTime || appointment.time;
+  const time = appointment.displayTime || appointment.appointmentTime || appointment.time;
   return [date, time].filter(Boolean).join(' at ');
 }
 
@@ -91,7 +91,7 @@ export default function AdminAppointmentsPanel() {
               {appointments.map((appointment) => (
                 <tr key={appointment.id}>
                   <td>
-                    <strong>{appointment.patientName || appointment.name || 'Patient'}</strong>
+                    <strong>{appointment.patientName || appointment.fullName || appointment.name || 'Patient'}</strong>
                     <span>{appointment.patientEmail || appointment.email}</span>
                     <span>{appointment.patientPhone || appointment.phone}</span>
                   </td>
