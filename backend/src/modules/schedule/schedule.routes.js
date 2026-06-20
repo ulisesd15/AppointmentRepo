@@ -41,8 +41,12 @@ function formatDisplayTime(value) {
   return `${displayHour}:${minuteString} ${suffix}`;
 }
 
+function dateOnlyWhere(columnName, date) {
+  return where(fn('DATE', col(columnName)), date);
+}
+
 function appointmentDateWhere(date) {
-  return where(fn('DATE', col('date')), date);
+  return dateOnlyWhere('date', date);
 }
 
 async function getBusinessHoursForDate(date) {
@@ -104,7 +108,7 @@ async function getExceptionForDate(date) {
 async function getBlockedSlots(date) {
   try {
     return await BlockedTimeSlot.findAll({
-      where: appointmentDateWhere(date),
+      where: dateOnlyWhere('blockDate', date),
       order: [['startTime', 'ASC']],
     });
   } catch (_error) {
