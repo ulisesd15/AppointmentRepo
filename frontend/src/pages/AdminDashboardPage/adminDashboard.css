@@ -47,6 +47,13 @@
   min-width: 180px;
 }
 
+.admin-filter-row {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(140px, 180px) auto;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
 .admin-table-wrap {
   width: 100%;
   overflow-x: auto;
@@ -123,12 +130,20 @@
 .hours-row input,
 .admin-table select,
 .inline-field select,
+.admin-filter-row input,
+.admin-filter-row select,
 .admin-mini-form input,
-.admin-mini-form select {
+.admin-mini-form select,
+.admin-mini-form textarea {
   border: 1px solid #cbd5e1;
   border-radius: 12px;
   padding: 0.55rem 0.7rem;
   background: white;
+}
+
+.button.small {
+  padding: 0.45rem 0.7rem;
+  font-size: 0.85rem;
 }
 
 .admin-two-column {
@@ -172,6 +187,11 @@
 .compact-list article span {
   color: #64748b;
   font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.compact-list article .button {
+  margin-top: 0.75rem;
 }
 
 @media (max-width: 760px) {
@@ -179,6 +199,7 @@
     flex-direction: column;
   }
 
+  .admin-filter-row,
   .hours-row {
     grid-template-columns: 1fr;
   }
