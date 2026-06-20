@@ -1,4 +1,5 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -7,51 +8,53 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       fullName: {
         type: Sequelize.STRING(100),
         allowNull: false,
-        field: 'fullName' // Explicitly map to snakeCase
       },
       email: {
         type: Sequelize.STRING(100),
         allowNull: false,
-        unique: true
+        unique: true,
       },
       phone: {
-        type: Sequelize.STRING(20)
+        type: Sequelize.STRING(20),
       },
       password: {
-        type: Sequelize.STRING(255)
+        type: Sequelize.STRING(255),
       },
       authProvider: {
         type: Sequelize.STRING(50),
+        allowNull: false,
         defaultValue: 'local',
-        field: 'authProvider'
       },
       googleId: {
         type: Sequelize.STRING(255),
-        field: 'googleId'
       },
       role: {
         type: Sequelize.ENUM('user', 'admin'),
         defaultValue: 'user',
-        allowNull: false
+        allowNull: false,
       },
-      createdAt: {
+      is_verified: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        field: 'createdAt'
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        field: 'updatedAt'
-      }
+      },
     });
   },
-  async down(queryInterface, Sequelize) {
+
+  async down(queryInterface) {
     await queryInterface.dropTable('users');
-  }
+  },
 };
