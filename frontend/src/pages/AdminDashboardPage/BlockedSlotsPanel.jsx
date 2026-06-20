@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { createBlockedSlot, fetchBlockedSlots } from '../../services/adminService.js';
 
 const initialForm = {
-  date: '',
+  blockDate: '',
   startTime: '09:00',
   endTime: '09:30',
   reason: '',
@@ -66,8 +66,8 @@ export default function BlockedSlotsPanel() {
       <form className="admin-mini-form" onSubmit={handleSubmit}>
         <input
           type="date"
-          value={form.date}
-          onChange={(event) => updateForm('date', event.target.value)}
+          value={form.blockDate}
+          onChange={(event) => updateForm('blockDate', event.target.value)}
           required
         />
         <input
@@ -98,7 +98,7 @@ export default function BlockedSlotsPanel() {
         <div className="compact-list">
           {blockedSlots.slice(0, 6).map((slot) => (
             <article key={slot.id}>
-              <strong>{slot.date}</strong>
+              <strong>{slot.blockDate}</strong>
               <span>{slot.startTime} - {slot.endTime}</span>
               <span>{slot.reason || 'No reason provided'}</span>
             </article>
