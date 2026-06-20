@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import HomePage from '../pages/HomePage';
-import LoginPage from '../pages/LoginPage';
-import BookingPage from '../pages/BookingPage';
-import MyAppointmentsPage from '../pages/MyAppointmentsPage';
-import AdminDashboardPage from '../pages/LoginPage/AdminDashboardPage';
+import HomePage from '../pages/HomePage/loginPage.jsx';
+import LoginPage from '../pages/LoginPage/adminPage.jsx';
+import BookingPage from '../pages/BookingPage/bookingPage.jsx';
+import MyAppointmentsPage from '../pages/MyAppointmentsPage/myAppointmentsPage.jsx';
+import AdminDashboardPage from '../pages/AdminDashboardPage/adminDashboardPage.jsx';
 
 export default function Router() {
   return (
