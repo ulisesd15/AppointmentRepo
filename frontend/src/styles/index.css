@@ -72,14 +72,16 @@ select {
   gap: 0.75rem;
 }
 
-.nav-links a {
+.nav-links a,
+.nav-button {
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 999px;
   padding: 0.45rem 0.85rem;
   color: #e2e8f0;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-button:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -148,6 +150,7 @@ p {
   font-weight: 700;
   border: 1px solid #cbd5e1;
   background: white;
+  cursor: pointer;
 }
 
 .button.primary {
@@ -166,7 +169,6 @@ p {
 .form-grid {
   display: grid;
   gap: 1rem;
-  max-width: 520px;
 }
 
 .field {
@@ -196,6 +198,144 @@ p {
   margin-top: 1rem;
 }
 
+.nav-button {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+  color: #e2e8f0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.nav-links a.active {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+
+.button:disabled,
+.nav-button:disabled,
+.slot-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.auth-card {
+  max-width: 680px;
+}
+
+.segmented-control {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  margin: 1rem 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #f8fafc;
+}
+
+.segmented-control button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.segmented-control button.active {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.notice.error {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.notice.success {
+  background: #ecfdf5;
+  color: #065f46;
+}
+
+.booking-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.booking-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.booking-panel {
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 1rem;
+  background: #f8fafc;
+}
+
+.booking-panel h2 {
+  margin: 1rem 0 0.75rem;
+}
+
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 0.65rem;
+}
+
+.slot-button {
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 0.75rem 0.5rem;
+  background: #ffffff;
+  color: #0f172a;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.slot-button:not(:disabled):hover,
+.slot-button.selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.slot-button:disabled {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+
+.appointment-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.appointment-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 1rem;
+  background: #f8fafc;
+}
+
+.appointment-card h2 {
+  margin-top: 0.35rem;
+}
+
+@media (max-width: 900px) {
+  .booking-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 720px) {
   .site-nav {
     align-items: flex-start;
@@ -204,5 +344,9 @@ p {
 
   .nav-links {
     justify-content: flex-start;
+  }
+
+  .appointment-card {
+    flex-direction: column;
   }
 }
