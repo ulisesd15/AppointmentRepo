@@ -2,6 +2,7 @@ import Layout from '../../components/Layout.jsx';
 import AdminAppointmentsPanel from './AdminAppointmentsPanel.jsx';
 import AdminStatsPanel from './AdminStatsPanel.jsx';
 import BusinessHoursPanel from './BusinessHoursPanel.jsx';
+import './adminDashboard.css';
 
 export default function AdminDashboardPage() {
   return (
