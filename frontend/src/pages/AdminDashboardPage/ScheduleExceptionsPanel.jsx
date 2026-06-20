@@ -5,11 +5,10 @@ import {
 } from '../../services/adminService.js';
 
 const initialForm = {
-  title: '',
-  exceptionType: 'special_hours',
+  name: '',
+  type: 'CUSTOM_HOURS',
   startDate: '',
   endDate: '',
-  isClosed: false,
   customOpenTime: '09:00',
   customCloseTime: '17:00',
   reason: '',
@@ -50,10 +49,14 @@ export default function ScheduleExceptionsPanel() {
     setMessage('');
 
     try {
-      await createScheduleException({
+      const payload = {
         ...form,
         endDate: form.endDate || form.startDate,
-      });
+        customOpenTime: form.type === 'BLOCK' ? null : form.customOpenTime,
+        customCloseTime: form.type === 'BLOCK' ? null : form.customCloseTime,
+      };
+
+      await createScheduleException(payload);
       setForm(initialForm);
       setMessage('Schedule exception created.');
       await loadExceptions();
@@ -75,17 +78,18 @@ export default function ScheduleExceptionsPanel() {
 
       <form className="admin-mini-form" onSubmit={handleSubmit}>
         <input
-          placeholder="Title, e.g. Holiday closure"
-          value={form.title}
-          onChange={(event) => updateForm('title', event.target.value)}
+          placeholder="Name, e.g. Holiday closure"
+          value={form.name}
+          onChange={(event) => updateForm('name', event.target.value)}
         />
         <select
-          value={form.exceptionType}
-          onChange={(event) => updateForm('exceptionType', event.target.value)}
+          value={form.type}
+          onChange={(event) => updateForm('type', event.target.value)}
         >
-          <option value="special_hours">Special hours</option>
-          <option value="holiday">Holiday</option>
-          <option value="closure">Closure</option>
+          <option value="CUSTOM_HOURS">Special hours</option>
+          <option value="BLOCK">Closed day</option>
+          <option value="YEARLY_FIXED">Yearly fixed holiday</option>
+          <option value="YEARLY_CALCULATED">Yearly calculated holiday</option>
         </select>
         <input
           type="date"
@@ -98,15 +102,7 @@ export default function ScheduleExceptionsPanel() {
           value={form.endDate}
           onChange={(event) => updateForm('endDate', event.target.value)}
         />
-        <label className="checkbox-field">
-          <input
-            type="checkbox"
-            checked={form.isClosed}
-            onChange={(event) => updateForm('isClosed', event.target.checked)}
-          />
-          Closed all day
-        </label>
-        {!form.isClosed && (
+        {form.type !== 'BLOCK' && (
           <>
             <input
               type="time"
@@ -136,9 +132,9 @@ export default function ScheduleExceptionsPanel() {
         <div className="compact-list">
           {exceptions.slice(0, 6).map((item) => (
             <article key={item.id}>
-              <strong>{item.title || item.exceptionType}</strong>
+              <strong>{item.name || item.type}</strong>
               <span>{item.startDate} to {item.endDate || item.startDate}</span>
-              <span>{item.isClosed ? 'Closed' : `${item.customOpenTime || ''} - ${item.customCloseTime || ''}`}</span>
+              <span>{item.type === 'BLOCK' ? 'Closed' : `${item.customOpenTime || ''} - ${item.customCloseTime || ''}`}</span>
             </article>
           ))}
           {exceptions.length === 0 && <div className="notice">No schedule exceptions yet.</div>}
