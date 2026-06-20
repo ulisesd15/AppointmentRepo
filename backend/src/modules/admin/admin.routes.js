@@ -7,11 +7,13 @@ const {
   BusinessHour,
   ScheduleException,
   BlockedTimeSlot,
+  Announcement,
 } = require('../../models');
 const { normalizeTime, formatDisplayTime } = require('../schedule/schedule.routes');
 
 const DAY_NAMES = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 const APPOINTMENT_STATUSES = ['pending', 'confirmed', 'completed', 'cancelled'];
+const USER_ROLES = ['user', 'admin'];
 const EXCEPTION_TYPES = ['BLOCK', 'CUSTOM_HOURS', 'YEARLY_FIXED', 'YEARLY_CALCULATED'];
 
 function cleanTime(value) {
@@ -21,6 +23,20 @@ function cleanTime(value) {
 
 function dateOnly(value) {
   return value ? String(value).slice(0, 10) : null;
+}
+
+function sanitizeUser(user) {
+  return {
+    id: user.id,
+    fullName: user.fullName,
+    email: user.email,
+    phone: user.phone,
+    authProvider: user.authProvider,
+    role: user.role,
+    isVerified: Boolean(user.isVerified),
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+  };
 }
 
 function sanitizeAppointment(appointment) {
@@ -88,6 +104,19 @@ function sanitizeBlockedSlot(slot) {
   };
 }
 
+function sanitizeAnnouncement(announcement) {
+  return {
+    id: announcement.id,
+    title: announcement.title,
+    content: announcement.content,
+    startDate: announcement.startDate,
+    endDate: announcement.endDate,
+    isActive: Boolean(announcement.isActive),
+    createdAt: announcement.createdAt,
+    updatedAt: announcement.updatedAt,
+  };
+}
+
 router.get('/health', (req, res) => {
   res.json({ module: 'admin', ok: true });
 });
@@ -122,6 +151,82 @@ router.get('/dashboard/stats', async (_req, res, next) => {
         upcomingAppointments,
       },
     });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.get('/users', async (req, res, next) => {
+  try {
+    const where = {};
+    const search = String(req.query.search || '').trim();
+
+    if (USER_ROLES.includes(req.query.role)) {
+      where.role = req.query.role;
+    }
+
+    if (req.query.verified === 'true') where.isVerified = true;
+    if (req.query.verified === 'false') where.isVerified = false;
+
+    if (search) {
+      where[Op.or] = [
+        { fullName: { [Op.like]: `%${search}%` } },
+        { email: { [Op.like]: `%${search}%` } },
+        { phone: { [Op.like]: `%${search}%` } },
+      ];
+    }
+
+    const users = await User.findAll({
+      where,
+      attributes: ['id', 'fullName', 'email', 'phone', 'authProvider', 'role', 'isVerified', 'createdAt', 'updatedAt'],
+      order: [['createdAt', 'DESC']],
+      limit: 100,
+    });
+
+    return res.json({ users: users.map(sanitizeUser) });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.put('/users/:id', async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    const updates = {};
+
+    if (typeof req.body.fullName === 'string') updates.fullName = req.body.fullName.trim();
+    if (typeof req.body.phone === 'string') updates.phone = req.body.phone.trim() || null;
+    if (typeof req.body.isVerified === 'boolean') updates.isVerified = req.body.isVerified;
+
+    if (req.body.role !== undefined) {
+      if (!USER_ROLES.includes(req.body.role)) {
+        return res.status(400).json({ error: 'Invalid user role.' });
+      }
+      updates.role = req.body.role;
+    }
+
+    await user.update(updates);
+    return res.json({ user: sanitizeUser(user) });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.put('/users/:id/verify', async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    await user.update({ isVerified: req.body.isVerified !== false });
+    return res.json({ user: sanitizeUser(user) });
   } catch (error) {
     return next(error);
   }
@@ -312,6 +417,68 @@ router.post('/blocked-slots', async (req, res, next) => {
     });
 
     return res.status(201).json({ blockedSlot: sanitizeBlockedSlot(blockedSlot) });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.get('/announcements', async (req, res, next) => {
+  try {
+    const where = {};
+    if (req.query.active === 'true') where.isActive = true;
+    if (req.query.active === 'false') where.isActive = false;
+
+    const announcements = await Announcement.findAll({
+      where,
+      order: [['createdAt', 'DESC']],
+    });
+
+    return res.json({ announcements: announcements.map(sanitizeAnnouncement) });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.post('/announcements', async (req, res, next) => {
+  try {
+    const title = String(req.body.title || '').trim();
+    const content = String(req.body.content || '').trim();
+
+    if (!title || !content) {
+      return res.status(400).json({ error: 'title and content are required.' });
+    }
+
+    const announcement = await Announcement.create({
+      title,
+      content,
+      startDate: req.body.startDate ? new Date(req.body.startDate) : null,
+      endDate: req.body.endDate ? new Date(req.body.endDate) : null,
+      isActive: req.body.isActive !== false,
+    });
+
+    return res.status(201).json({ announcement: sanitizeAnnouncement(announcement) });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.put('/announcements/:id', async (req, res, next) => {
+  try {
+    const announcement = await Announcement.findByPk(req.params.id);
+
+    if (!announcement) {
+      return res.status(404).json({ error: 'Announcement not found.' });
+    }
+
+    const updates = {};
+    if (typeof req.body.title === 'string') updates.title = req.body.title.trim();
+    if (typeof req.body.content === 'string') updates.content = req.body.content.trim();
+    if (req.body.startDate !== undefined) updates.startDate = req.body.startDate ? new Date(req.body.startDate) : null;
+    if (req.body.endDate !== undefined) updates.endDate = req.body.endDate ? new Date(req.body.endDate) : null;
+    if (typeof req.body.isActive === 'boolean') updates.isActive = req.body.isActive;
+
+    await announcement.update(updates);
+    return res.json({ announcement: sanitizeAnnouncement(announcement) });
   } catch (error) {
     return next(error);
   }
