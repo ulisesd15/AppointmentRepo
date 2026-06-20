@@ -1,0 +1,140 @@
+.admin-hero {
+  margin-bottom: 1.25rem;
+}
+
+.admin-section {
+  margin-top: 1.25rem;
+}
+
+.admin-section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.admin-stat-card {
+  border: 1px solid #dbeafe;
+  border-radius: 18px;
+  padding: 1rem;
+  background: #eff6ff;
+}
+
+.admin-stat-card span {
+  display: block;
+  color: #1e3a8a;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.admin-stat-card strong {
+  display: block;
+  color: #0f172a;
+  font-size: 2rem;
+  line-height: 1;
+  margin-top: 0.5rem;
+}
+
+.inline-field {
+  min-width: 180px;
+}
+
+.admin-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.9rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-table th {
+  color: #0f172a;
+  background: #f8fafc;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-table td span {
+  display: block;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.status-pill {
+  display: inline-flex !important;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+  background: #f1f5f9;
+  color: #334155 !important;
+  font-weight: 700;
+}
+
+.hours-form {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.hours-row {
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) auto minmax(120px, 160px) minmax(120px, 160px);
+  gap: 0.75rem;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 0.8rem;
+  background: #f8fafc;
+}
+
+.hours-row strong {
+  text-transform: capitalize;
+  color: #0f172a;
+}
+
+.hours-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.hours-row input,
+.admin-table select,
+.inline-field select {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 0.55rem 0.7rem;
+  background: white;
+}
+
+@media (max-width: 760px) {
+  .admin-section-header {
+    flex-direction: column;
+  }
+
+  .hours-row {
+    grid-template-columns: 1fr;
+  }
+}
